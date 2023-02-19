@@ -2,9 +2,21 @@ package main
 
 import (
 	"archive/zip"
+	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
+
+func getPath() string {
+	var path string
+	fmt.Print("please type the path : ")
+	_, err := fmt.Scan(&path)
+	if err != nil {
+		panic(err)
+	}
+	return path
+}
 
 func main() {
 
@@ -20,14 +32,16 @@ func main() {
 
 	//opening file
 	println("Opening first file.....")
-	f1, err := os.Open("data.csv")
+	f1, err := os.Open(getPath())
 	if err != nil {
 		panic(err)
 	}
 	defer f1.Close()
 
+	_, fileName := filepath.Split(f1.Name())
+
 	println("Adding data file to archive")
-	w1, err := zipWriter.Create("csv/data.csv")
+	w1, err := zipWriter.Create(fileName)
 	if err != nil {
 		panic(err)
 	}
