@@ -15,10 +15,11 @@ func getPath() string {
 	if err != nil {
 		panic(err)
 	}
+	println(path)
 	return path
 }
 
-func main() {
+func Zipping() {
 
 	//creating simple archive folder to store the data in
 	println("Creating zip archive.....")
