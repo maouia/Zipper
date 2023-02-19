@@ -8,7 +8,7 @@ import (
 func main() {
 
 	for {
-		print("1) : to zip \n2) : tp unzip \n3) : to exit   ")
+		print("1) : to zip \n2) : to unzip \n3) : to exit   ")
 		var varibale string
 		fmt.Scan(&varibale)
 		switch varibale {
