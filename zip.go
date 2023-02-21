@@ -1,9 +1,10 @@
 package main
 
 import (
-	"archive/zip"
+	"bufio"
+	"compress/gzip"
 	"fmt"
-	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -15,45 +16,41 @@ func getPath() string {
 	if err != nil {
 		panic(err)
 	}
-	println(path)
 	return path
 }
 
 func Zipping() {
+	file := getPath()
 
-	//creating simple archive folder to store the data in
-	println("Creating zip archive.....")
-	archive, err := os.Create("archive.zip")
-	if err != nil {
-		panic(err)
-	}
-	defer archive.Close()
+	path, name_of_file := filepath.Split(file)
 
-	zipWriter := zip.NewWriter(archive)
+	f, _ := os.Open(file)
 
-	//opening file
-	println("Opening first file.....")
-	f1, err := os.Open(getPath())
-	if err != nil {
-		panic(err)
-	}
-	defer f1.Close()
+	read := bufio.NewReader(f)
 
-	_, fileName := filepath.Split(f1.Name())
+	// Now we would use the variable Read All to get all the bytes
+	// So we just used variable data which will read all the bytes
+	data, _ := ioutil.ReadAll(read)
 
-	println("Adding data file to archive")
-	w1, err := zipWriter.Create(fileName)
-	if err != nil {
-		panic(err)
-	}
+	//name_of_file = strings.Replace(name_of_file, filepath.Ext(name_of_file), ".gz", -1)
+	name_of_file = name_of_file + ".gz"
+	// Open file for writing
+	// Now using the Os.create method we would use the
+	// To store the information of the file gz extension
+	f, _ = os.Create(path + name_of_file)
 
-	//copy uncompressed file to archive
-	if _, err := io.Copy(w1, f1); err != nil {
-		panic(err)
-	}
+	// Write compresses Data
+	// We would use NewWriter to basically
+	// copy all the compressed data
 
-	//Closing archive
-	println("Every thing complited we just closing the archive now")
-	archive.Close()
+	w := gzip.NewWriter(f)
+
+	// With the help of the Writer method, we would
+	// write all the bytes in the data variable
+	// copied from the original file
+	w.Write(data)
+
+	// We would now close the file.
+	w.Close()
 
 }
